@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESC}}" />
+  <link rel="canonical" href="{{CANONICAL}}" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#09090c" />
+
+  <meta property="og:type" content="business.business" />
+  <meta property="og:site_name" content="유앤미 가라오케" />
+  <meta property="og:title" content="{{TITLE}}" />
+  <meta property="og:description" content="{{DESC}}" />
+  <meta property="og:url" content="{{CANONICAL}}" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:image" content="https://younadmebaby.com/assets/img/og-cover.jpg" />
+
+  <link rel="stylesheet" href="/assets/css/style.css" />
+{{HEAD_EXTRA}}
+</head>
+<body>
+  <a class="sr-only" href="#main">본문 바로가기</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="/" aria-label="유앤미 가라오케 홈">
+        <span>유앤미<span class="dot">.</span></span>
+        <small>강남 가라오케</small>
+      </a>
+      <button class="nav-toggle" aria-label="메뉴 열기" aria-controls="nav-menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-menu" id="nav-menu">
+        <nav aria-label="주 메뉴" style="width:100%">
+{{NAV}}
+        </nav>
+        <a class="btn btn-primary nav-cta" href="tel:01034310531">전화 예약</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+{{CONTENT}}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>유앤미 가라오케</h4>
+          <p>서울특별시 서초구 잠원동 18-5<br />티롤호텔(TIROL HOTEL) 별관 지하<br />유앤미가라오케 정문 입구</p>
+          <p>예약 담당 서부장 · <a href="tel:01034310531">010-3431-0531</a><br />운영시간 매일 18:00 – 05:00</p>
+        </div>
+        <div>
+          <h4>바로가기</h4>
+          <ul>
+            <li><a href="/about/">유앤미 소개</a></li>
+            <li><a href="/guide/">이용안내</a></li>
+            <li><a href="/rooms/">룸 &amp; 갤러리</a></li>
+            <li><a href="/reservation/">예약 / 문의</a></li>
+            <li><a href="/location/">오시는 길</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>정책 안내</h4>
+          <ul>
+            <li><a href="/youth-protection/">청소년보호정책</a></li>
+            <li><a href="/privacy/">개인정보처리방침</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span class="warn">청소년 출입·고용 금지 업소 (만 19세 미만 출입 불가)</span><br />
+        상호: 유앤미 가라오케 ｜ 대표자: (표기 예정) ｜ 사업자등록번호: (표기 예정)<br />
+        주소: 서울특별시 서초구 잠원동 18-5 티롤호텔 별관 지하 ｜ 업태: 유흥주점업<br />
+        © <span data-year>2026</span> 유앤미 가라오케. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-callbar" aria-label="빠른 연락">
+    <a class="btn btn-primary" href="tel:01034310531">📞 전화 예약</a>
+    <a class="btn btn-line" href="/location/">오시는 길</a>
+  </div>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

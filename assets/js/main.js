@@ -18,6 +18,17 @@
     });
   }
 
+  /* ── 모바일 하위메뉴 아코디언 ── */
+  var subToggles = document.querySelectorAll(".sub-toggle");
+  subToggles.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var sub = btn.parentElement.querySelector(".submenu");
+      if (!sub) return;
+      var open = sub.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
   /* ── 헤더 스크롤 상태 (배경 글래스 효과) ── */
   var header = document.querySelector(".site-header");
   if (header) {
