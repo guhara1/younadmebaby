@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="유앤미">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1828"/>
+      <stop offset="1" stop-color="#0a090d"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6ecc8"/>
+      <stop offset=".5" stop-color="#e8cf8e"/>
+      <stop offset="1" stop-color="#c69f52"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="12.75" fill="none" stroke="#c8a45c" stroke-opacity=".4" stroke-width="1.5"/>
+  <path d="M20.48 14.08 L20.48 35.84 A11.52 11.52 0 0 0 43.52 35.84 L43.52 14.08"
+        fill="none" stroke="url(#gold)" stroke-width="8.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="51.6" cy="42" r="3.1" fill="url(#gold)"/>
+</svg>
