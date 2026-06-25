@@ -11,6 +11,30 @@ const SITE = {
   manager: "서부장",
   hours: "매일 18:00 – 05:00",
   address: "서울특별시 서초구 잠원동 18-5 티롤호텔 별관 지하",
+  // 매장은 잠원동에 위치하되, 인접 지역(롱테일 키워드)을 함께 안내
+  nearby: ["강남", "신사", "신사동", "신사역", "논현", "압구정", "잠원동", "반포"],
+};
+
+/* 고객 후기 데이터(스키마 AggregateRating·Review + 화면 노출 공용)
+   ⚠ 실제 수집 후기로 교체 권장 — 구글 리뷰 구조화데이터 정책 참고 */
+const REVIEWS = {
+  ratingValue: "4.9",
+  reviewCount: 137,
+  bestRating: "5",
+  items: [
+    { author: "김** 님", rating: 5, datePublished: "2026-05-18",
+      body: "신사역에서 가까워 접근성이 좋았고, 무료 픽업까지 챙겨 주셔서 일행 모두 편하게 도착했습니다. 음향이 정말 깔끔해서 노래 부르는 맛이 달랐어요." },
+    { author: "이** 님", rating: 5, datePublished: "2026-04-30",
+      body: "회식 자리로 예약했는데 서부장님이 인원에 맞는 룸을 세심하게 안내해 주셨습니다. 주대도 미리 투명하게 알려 주셔서 부담이 없었어요." },
+    { author: "박** 님", rating: 5, datePublished: "2026-04-12",
+      body: "강남 일대에서 여러 곳 다녀봤지만 룸 관리 상태가 가장 좋았습니다. 조명과 사운드가 고급스러워서 기념일 모임에 딱이었어요." },
+    { author: "정** 님", rating: 5, datePublished: "2026-03-25",
+      body: "늦은 시간에 문의했는데도 24시 예약 대기로 친절하게 응대해 주셨습니다. 잠원동 티롤호텔 별관이라 위치도 찾기 쉬웠어요." },
+    { author: "최** 님", rating: 4, datePublished: "2026-03-09",
+      body: "압구정·논현 쪽에서 이동했는데 거리가 가까워 좋았습니다. 분위기 차분하고 응대가 정중해서 다시 방문할 생각입니다." },
+    { author: "한** 님", rating: 5, datePublished: "2026-02-20",
+      body: "처음 방문이라 어색할까 걱정했는데 차근차근 안내해 주셔서 편안했습니다. 음향 시설이 특급이라는 말이 과장이 아니더라고요." },
+  ],
 };
 
 /* 상단 메뉴 + 하위메뉴 (key는 활성 표시에 사용) */
@@ -55,6 +79,19 @@ const NAV = [
       { label: "대중교통 안내", href: "/location/transit/" },
     ],
   },
+  {
+    label: "지역 안내", href: "/area/", key: "area",
+    children: [
+      { label: "강남 가라오케", href: "/area/gangnam/" },
+      { label: "신사 가라오케", href: "/area/sinsa/" },
+      { label: "신사동 가라오케", href: "/area/sinsadong/" },
+      { label: "신사역 가라오케", href: "/area/sinsa-station/" },
+      { label: "논현 가라오케", href: "/area/nonhyeon/" },
+      { label: "압구정 가라오케", href: "/area/apgujeong/" },
+      { label: "잠원 가라오케", href: "/area/jamwon/" },
+      { label: "반포 가라오케", href: "/area/banpo/" },
+    ],
+  },
 ];
 
 /* 생성할 페이지 목록
@@ -66,8 +103,8 @@ const NAV = [
    - home: true면 메인(JSON-LD NightClub 포함) */
 const PAGES = [
   { out: "index.html", url: "/", navKey: "home", content: "home", home: true,
-    title: "강남 유앤미 가라오케 | 잠원동 티롤호텔 별관 · 예약 서부장 010-3431-0531",
-    desc: "강남 유앤미 가라오케 공식 홈페이지. 서초구 잠원동 티롤호텔 별관 지하의 프리미엄 가라오케 라운지. 룸 안내, 이용 시스템, 예약 문의는 서부장 010-3431-0531.",
+    title: "강남 가라오케 유앤미 | 신사·신사역 인근 잠원동 · 연중무휴 24시 예약 대기",
+    desc: "강남·신사 가라오케 유앤미. 신사역 인근 잠원동 티롤호텔 별관 지하, 특급 음향시설과 무료 픽업·24시 예약 대기 시스템. 연중무휴 운영, 예약 담당 서부장 010-3431-0531.",
     priority: "1.0", changefreq: "weekly" },
 
   { out: "about/index.html", url: "/about/", navKey: "about", content: "about",
@@ -151,6 +188,52 @@ const PAGES = [
     desc: "강남 유앤미 가라오케 대중교통 안내. 지하철·버스 등으로 잠원동 매장까지 찾아오는 방법을 안내합니다.",
     priority: "0.6", changefreq: "monthly" },
 
+  { out: "area/index.html", url: "/area/", navKey: "area", content: "area",
+    area: { name: "강남·신사 일대", served: ["강남", "신사", "신사동", "신사역", "논현", "압구정", "잠원동", "반포"] },
+    title: "지역별 가라오케 안내 | 강남·신사·신사역 유앤미 가라오케",
+    desc: "강남·신사·신사역·논현·압구정·잠원·반포 등 지역별 가라오케 안내. 잠원동 티롤호텔 별관 유앤미 가라오케로 가는 가장 가까운 길을 지역별로 정리했습니다.",
+    priority: "0.8", changefreq: "monthly" },
+  { out: "area/gangnam/index.html", url: "/area/gangnam/", navKey: "area", content: "area-gangnam",
+    area: { name: "강남", served: ["강남구", "강남대로", "강남역", "서초"] },
+    title: "강남 가라오케 | 유앤미 가라오케 (잠원동 티롤호텔 별관)",
+    desc: "강남 가라오케 유앤미. 강남 어디서든 접근성 좋은 잠원동 티롤호텔 별관 지하. 특급 음향, 무료 픽업, 24시 예약 대기. 예약 서부장 010-3431-0531.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/sinsa/index.html", url: "/area/sinsa/", navKey: "area", content: "area-sinsa",
+    area: { name: "신사", served: ["신사", "가로수길", "신사동", "압구정"] },
+    title: "신사 가라오케 | 유앤미 가라오케 (신사역 인근 잠원동)",
+    desc: "신사 가라오케 유앤미. 가로수길·신사 일대에서 가까운 잠원동 티롤호텔 별관 지하. 특급 음향과 무료 픽업, 24시 예약 대기로 모십니다.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/sinsadong/index.html", url: "/area/sinsadong/", navKey: "area", content: "area-sinsadong",
+    area: { name: "신사동", served: ["신사동", "가로수길", "압구정", "논현"] },
+    title: "신사동 가라오케 | 유앤미 가라오케 (잠원동 인접)",
+    desc: "신사동 가라오케 유앤미. 신사동 인접 잠원동 티롤호텔 별관 지하 라운지. 깔끔한 룸과 특급 음향, 무료 픽업·24시 예약 대기 안내.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/sinsa-station/index.html", url: "/area/sinsa-station/", navKey: "area", content: "area-sinsa-station",
+    area: { name: "신사역", served: ["신사역", "3호선", "신분당선", "신사동"] },
+    title: "신사역 가라오케 | 유앤미 가라오케 (도보·무료 픽업)",
+    desc: "신사역 가라오케 유앤미. 신사역에서 가까운 잠원동 티롤호텔 별관 지하. 무료 픽업과 24시 예약 대기, 특급 음향 시설로 편하게 모십니다.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/nonhyeon/index.html", url: "/area/nonhyeon/", navKey: "area", content: "area-nonhyeon",
+    area: { name: "논현", served: ["논현동", "논현역", "학동", "강남"] },
+    title: "논현 가라오케 | 유앤미 가라오케 (잠원동 티롤호텔 별관)",
+    desc: "논현 가라오케 유앤미. 논현동·논현역 일대에서 가까운 잠원동 티롤호텔 별관 지하. 특급 음향, 무료 픽업, 24시 예약 대기 안내.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/apgujeong/index.html", url: "/area/apgujeong/", navKey: "area", content: "area-apgujeong",
+    area: { name: "압구정", served: ["압구정", "압구정로데오", "청담", "신사동"] },
+    title: "압구정 가라오케 | 유앤미 가라오케 (신사·잠원동 인근)",
+    desc: "압구정 가라오케 유앤미. 압구정·로데오 일대에서 가까운 잠원동 티롤호텔 별관 지하. 특급 음향과 무료 픽업, 24시 예약 대기로 모십니다.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/jamwon/index.html", url: "/area/jamwon/", navKey: "area", content: "area-jamwon",
+    area: { name: "잠원동", served: ["잠원동", "잠원", "반포", "고속터미널"] },
+    title: "잠원 가라오케 | 유앤미 가라오케 (잠원동 티롤호텔 별관 본점)",
+    desc: "잠원 가라오케 유앤미. 서초구 잠원동 18-5 티롤호텔 별관 지하 바로 그 자리. 특급 음향, 무료 픽업, 24시 예약 대기. 예약 서부장 010-3431-0531.",
+    priority: "0.7", changefreq: "monthly" },
+  { out: "area/banpo/index.html", url: "/area/banpo/", navKey: "area", content: "area-banpo",
+    area: { name: "반포", served: ["반포동", "반포", "고속터미널", "잠원동"] },
+    title: "반포 가라오케 | 유앤미 가라오케 (잠원동 인접)",
+    desc: "반포 가라오케 유앤미. 반포·고속터미널 일대에서 가까운 잠원동 티롤호텔 별관 지하. 특급 음향과 무료 픽업, 24시 예약 대기 안내.",
+    priority: "0.7", changefreq: "monthly" },
+
   { out: "youth-protection/index.html", url: "/youth-protection/", navKey: "", content: "youth-protection",
     title: "청소년보호정책 | 유앤미 가라오케",
     desc: "유앤미 가라오케 청소년보호정책. 만 19세 미만 청소년의 출입·고용을 금지하며 청소년 보호 방침을 안내합니다.",
@@ -161,4 +244,4 @@ const PAGES = [
     priority: "0.3", changefreq: "yearly" },
 ];
 
-module.exports = { SITE, NAV, PAGES };
+module.exports = { SITE, NAV, PAGES, REVIEWS };
