@@ -6,7 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { SITE, NAV, PAGES } = require("./site.config.js");
+const { SITE, NAV, PAGES, REVIEWS } = require("./site.config.js");
 
 const ROOT = __dirname;
 const layout = fs.readFileSync(path.join(ROOT, "src/layout.html"), "utf8");
@@ -52,6 +52,41 @@ function breadcrumbTrail(url) {
 }
 
 /* ---------- JSON-LD 생성 ---------- */
+const ADDRESS = {
+  "@type": "PostalAddress",
+  streetAddress: "잠원동 18-5 티롤호텔 별관 지하",
+  addressLocality: "서초구",
+  addressRegion: "서울특별시",
+  postalCode: "06504",
+  addressCountry: "KR",
+};
+const GEO = { "@type": "GeoCoordinates", latitude: 37.5135, longitude: 127.019 };
+const OPENING_HOURS = [{
+  "@type": "OpeningHoursSpecification",
+  dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+  opens: "18:00", closes: "05:00",
+}];
+
+/* AggregateRating + Review (메인·지역 페이지 공용)
+   ⚠ 실제 수집 후기로 교체 권장 (site.config.js REVIEWS) */
+function ratingAndReviews() {
+  return {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: REVIEWS.ratingValue,
+      reviewCount: String(REVIEWS.reviewCount),
+      bestRating: REVIEWS.bestRating,
+    },
+    review: REVIEWS.items.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.author },
+      datePublished: r.datePublished,
+      reviewRating: { "@type": "Rating", ratingValue: String(r.rating), bestRating: REVIEWS.bestRating },
+      reviewBody: r.body,
+    })),
+  };
+}
+
 function jsonLdNightClub() {
   return {
     "@context": "https://schema.org",
@@ -62,20 +97,9 @@ function jsonLdNightClub() {
     telephone: "+82-10-3431-0531",
     image: SITE.origin + "/assets/img/og-cover.jpg",
     priceRange: "₩₩₩",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "잠원동 18-5 티롤호텔 별관 지하",
-      addressLocality: "서초구",
-      addressRegion: "서울특별시",
-      postalCode: "06504",
-      addressCountry: "KR",
-    },
-    geo: { "@type": "GeoCoordinates", latitude: 37.5135, longitude: 127.019 },
-    openingHoursSpecification: [{
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-      opens: "18:00", closes: "05:00",
-    }],
+    address: ADDRESS,
+    geo: GEO,
+    openingHoursSpecification: OPENING_HOURS,
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+82-10-3431-0531",
@@ -83,6 +107,45 @@ function jsonLdNightClub() {
       name: "서부장",
       availableLanguage: ["ko"],
     },
+    ...ratingAndReviews(),
+  };
+}
+
+/* 지역 랜딩페이지용 LocalBusiness(NightClub) — areaServed + 평점/후기 포함 */
+function jsonLdAreaBusiness(page) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "NightClub",
+    name: `유앤미 가라오케 — ${page.area.name} 가라오케`,
+    alternateName: `${page.area.name} 유앤미 가라오케`,
+    url: SITE.origin + page.url,
+    telephone: "+82-10-3431-0531",
+    image: SITE.origin + "/assets/img/og-cover.jpg",
+    priceRange: "₩₩₩",
+    address: ADDRESS,
+    geo: GEO,
+    areaServed: page.area.served.map((a) => ({ "@type": "Place", name: a })),
+    openingHoursSpecification: OPENING_HOURS,
+    ...ratingAndReviews(),
+  };
+}
+
+/* 메인 FAQ 구조화데이터 (home.html의 FAQ와 내용 일치 유지) */
+const HOME_FAQ = [
+  ["예약은 어떻게 하나요?", "전화(010-3431-0531) 또는 카카오톡으로 인원과 방문 예정 시간을 알려주시면 됩니다. 24시 예약 대기로 접수하며, 방문 전 예약을 권장합니다."],
+  ["운영 시간이 어떻게 되나요?", "연중무휴로 매일 저녁 18시부터 새벽 05시까지 운영합니다. 예약 문의는 24시간 대기로 받고 있으며, 일정에 따라 변동될 수 있으니 방문 전 전화로 확인해 주세요."],
+  ["위치와 픽업은 어떻게 되나요?", "서초구 잠원동 티롤호텔 별관 지하에 있으며 신사역·강남과 인접합니다. 무료 픽업을 지원하니 예약 시 위치를 알려주시면 안내해 드립니다."],
+  ["주대(이용요금)는 어떻게 안내되나요?", "코스와 주대는 예약·방문 시 명확히 안내해 드립니다. 자세한 내용은 이용안내 페이지를 참고하시거나 담당자에게 문의하세요."],
+];
+function jsonLdFaqPage() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: HOME_FAQ.map(([q, a]) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
   };
 }
 
@@ -110,14 +173,17 @@ function render(page) {
   const content = fs.readFileSync(fragmentPath, "utf8").trimEnd();
   const canonical = SITE.origin + page.url;
 
-  let headExtra;
+  const ld = [];
   if (page.home) {
-    headExtra = scriptLd(jsonLdNightClub());
+    ld.push(jsonLdNightClub());
+    ld.push(jsonLdFaqPage());
+  } else if (page.area) {
+    ld.push(jsonLdAreaBusiness(page));
+    ld.push(jsonLdBreadcrumb(page.url));
   } else if (page.navKey) {
-    headExtra = scriptLd(jsonLdBreadcrumb(page.url));
-  } else {
-    headExtra = "";
+    ld.push(jsonLdBreadcrumb(page.url));
   }
+  const headExtra = ld.map(scriptLd).join("\n");
 
   let html = layout
     .replace(/{{TITLE}}/g, page.title)
