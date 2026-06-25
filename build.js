@@ -92,7 +92,7 @@ function jsonLdNightClub() {
     "@context": "https://schema.org",
     "@type": "NightClub",
     name: "유앤미 가라오케",
-    alternateName: "강남 유앤미 가라오케",
+    alternateName: "강남 가라오케 유앤미",
     url: SITE.origin + "/",
     telephone: "+82-10-3431-0531",
     image: SITE.origin + "/assets/img/og-cover.jpg",
