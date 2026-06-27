@@ -104,7 +104,7 @@ const NAV = [
 const PAGES = [
   { out: "index.html", url: "/", navKey: "home", content: "home", home: true,
     title: "강남 가라오케 유앤미 | 신사·신사역 인근 잠원동 · 연중무휴 24시 예약 대기",
-    desc: "강남·신사 가라오케 유앤미. 신사역 인근 잠원동 티롤호텔 별관 지하, 특급 음향시설과 무료 픽업·24시 예약 대기 시스템. 연중무휴 운영, 예약 담당 서부장 010-3431-0531.",
+    desc: "강남·신사 가라오케 유앤미. 신사역 인근 잠원동 티롤호텔 별관 지하, 특급 음향시설과 무료 픽업·24시 예약 대기 시스템. 연중무휴 운영, 예약 담당 서부장.",
     priority: "1.0", changefreq: "weekly" },
 
   { out: "about/index.html", url: "/about/", navKey: "about", content: "about",
