@@ -199,7 +199,13 @@ function render(page) {
   return outPath;
 }
 
-/* ---------- sitemap & robots ---------- */
+/* ---------- sitemap · rss · robots ---------- */
+function xmlEscape(s) {
+  return String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
 function buildSitemap() {
   const today = new Date().toISOString().slice(0, 10);
   const urls = PAGES.map((p) => [
@@ -214,8 +220,58 @@ function buildSitemap() {
   fs.writeFileSync(path.join(ROOT, "sitemap.xml"), xml, "utf8");
 }
 
+/* RSS 2.0 피드 — 네이버 서치어드바이저 RSS 제출 + 색인 발견 가속용 */
+function buildRss() {
+  const now = new Date();
+  const pubDate = now.toUTCString();
+  const items = PAGES
+    .filter((p) => p.priority !== "0.3") // 정책 페이지 제외
+    .sort((a, b) => parseFloat(b.priority || "0.5") - parseFloat(a.priority || "0.5"))
+    .map((p) => [
+      "    <item>",
+      `      <title>${xmlEscape(p.title)}</title>`,
+      `      <link>${SITE.origin}${p.url}</link>`,
+      `      <guid isPermaLink="true">${SITE.origin}${p.url}</guid>`,
+      `      <pubDate>${pubDate}</pubDate>`,
+      `      <description>${xmlEscape(p.desc)}</description>`,
+      "    </item>",
+    ].join("\n")).join("\n");
+  const xml =
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n` +
+    `  <channel>\n` +
+    `    <title>${xmlEscape(SITE.name)}</title>\n` +
+    `    <link>${SITE.origin}/</link>\n` +
+    `    <description>강남·신사 가라오케 유앤미 — 신사역 인근 잠원동 티롤호텔 별관, 연중무휴 24시간 운영.</description>\n` +
+    `    <language>ko</language>\n` +
+    `    <lastBuildDate>${pubDate}</lastBuildDate>\n` +
+    `    <atom:link href="${SITE.origin}/feed.xml" rel="self" type="application/rss+xml" />\n` +
+    `${items}\n` +
+    `  </channel>\n` +
+    `</rss>\n`;
+  fs.writeFileSync(path.join(ROOT, "feed.xml"), xml, "utf8");
+}
+
 function buildRobots() {
-  const txt = `User-agent: *\nAllow: /\n\nSitemap: ${SITE.origin}/sitemap.xml\n`;
+  const txt = [
+    "User-agent: *",
+    "Allow: /",
+    "",
+    "# 네이버 검색로봇",
+    "User-agent: Yeti",
+    "Allow: /",
+    "",
+    "# 구글 검색로봇",
+    "User-agent: Googlebot",
+    "Allow: /",
+    "",
+    "# 빙 검색로봇",
+    "User-agent: bingbot",
+    "Allow: /",
+    "",
+    `Sitemap: ${SITE.origin}/sitemap.xml`,
+    "",
+  ].join("\n");
   fs.writeFileSync(path.join(ROOT, "robots.txt"), txt, "utf8");
 }
 
@@ -230,5 +286,6 @@ for (const page of PAGES) {
   }
 }
 buildSitemap();
+buildRss();
 buildRobots();
-console.log(`✓ ${count}/${PAGES.length} 페이지 생성 완료 · sitemap.xml · robots.txt`);
+console.log(`✓ ${count}/${PAGES.length} 페이지 생성 완료 · sitemap.xml · feed.xml · robots.txt`);
