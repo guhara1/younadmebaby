@@ -94,7 +94,7 @@ function jsonLdNightClub() {
     name: "유앤미 가라오케",
     alternateName: "강남 가라오케 유앤미",
     url: SITE.origin + "/",
-    telephone: "+82-10-3431-0531",
+    telephone: "+82-10-5969-5031",
     image: SITE.origin + "/assets/img/og-cover.jpg",
     priceRange: "₩₩₩",
     address: ADDRESS,
@@ -102,7 +102,7 @@ function jsonLdNightClub() {
     openingHoursSpecification: OPENING_HOURS,
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+82-10-3431-0531",
+      telephone: "+82-10-5969-5031",
       contactType: "reservations",
       name: "서부장",
       availableLanguage: ["ko"],
@@ -119,7 +119,7 @@ function jsonLdAreaBusiness(page) {
     name: `유앤미 가라오케 — ${page.area.name} 가라오케`,
     alternateName: `${page.area.name} 유앤미 가라오케`,
     url: SITE.origin + page.url,
-    telephone: "+82-10-3431-0531",
+    telephone: "+82-10-5969-5031",
     image: SITE.origin + "/assets/img/og-cover.jpg",
     priceRange: "₩₩₩",
     address: ADDRESS,
@@ -132,7 +132,7 @@ function jsonLdAreaBusiness(page) {
 
 /* 메인 FAQ 구조화데이터 (home.html의 FAQ와 내용 일치 유지) */
 const HOME_FAQ = [
-  ["예약은 어떻게 하나요?", "전화(010-3431-0531) 또는 카카오톡으로 인원과 방문 예정 시간을 알려주시면 됩니다. 24시 예약 대기로 접수하며, 방문 전 예약을 권장합니다."],
+  ["예약은 어떻게 하나요?", "전화(010-5969-5031) 또는 카카오톡으로 인원과 방문 예정 시간을 알려주시면 됩니다. 24시 예약 대기로 접수하며, 방문 전 예약을 권장합니다."],
   ["운영 시간이 어떻게 되나요?", "연중무휴로 24시간 운영합니다. 낮이든 새벽이든 언제든 방문하실 수 있으며, 예약 문의도 24시간 받고 있습니다. 다만 방문 전 전화로 룸 현황을 확인해 주시면 더 편하게 안내해 드립니다."],
   ["위치와 픽업은 어떻게 되나요?", "서초구 잠원동 티롤호텔 별관 지하에 있으며 신사역·강남과 인접합니다. 무료 픽업을 지원하니 예약 시 위치를 알려주시면 안내해 드립니다."],
   ["주대(이용요금)는 어떻게 안내되나요?", "코스와 주대는 예약·방문 시 명확히 안내해 드립니다. 자세한 내용은 이용안내 페이지를 참고하시거나 담당자에게 문의하세요."],
